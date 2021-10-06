@@ -30,7 +30,12 @@ namespace Plesnik.Eshop.Web.Areas.Admin.Controllers
 
         public IActionResult Delete(int id)
         {
-            return View();
+            IList<CarouselItem> carouselItems = DatabaseFake.CarouselItems;
+            var carouselItem = carouselItems.FirstOrDefault(i => i.Id == id);
+            if (carouselItem != null)
+                carouselItems.Remove(carouselItem);
+
+            return RedirectToAction(nameof(CarouselController.Select));
         }
     }
 }

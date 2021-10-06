@@ -6,12 +6,15 @@
 
 <p>This page shows all Carousel Items for admin.</p>
 
+<p><a class="btn btn-primary" role="button" asp-action="Create">Create new Carousel Item</a></p>
+
 <table class="table table-striped">
     <thead>
         <tr>
             <th scope="col">Id</th>
             <th scope="col">Image Source</th>
             <th scope="col">Image Alt</th>
+            <th scope="col"></th>
         </tr>
     </thead>
     <tbody>
@@ -22,7 +25,13 @@
                 <th scope="row">@Model[i].Id</th>
                 <td><a href="@Model[i].ImageSource">@Model[i].ImageSource</a></td>
                 <td>@Model[i].ImageAlt</td>
+                <td><a asp-action="Edit" asp-route-Id="@Model[i].Id">Edit</a> <a asp-action="Delete" asp-route-Id="@Model[i].Id" onclick="return confirmDelete();">Delete</a></td>
             </tr>
         }
     </tbody>
 </table>
+
+@section Scripts
+{
+    <script src="~/js/alerts.js"></script>
+} 
