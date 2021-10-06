@@ -12,10 +12,10 @@ namespace Plesnik.Eshop.Web.Models.Database
         {
             List<CarouselItem> carouselItems = new List<CarouselItem>()
             {
-                new CarouselItem("/img/image1.jpg", "Orangutan"),
-                new CarouselItem("/img/image2.jpg", "Gorilla"),
-                new CarouselItem("/img/image3.jpg", "\"Human\""),
-                new CarouselItem("/img/image4.jpg", "Chimpanzee")
+                new CarouselItem(0, "/img/image1.jpg", "Orangutan"),
+                new CarouselItem(1, "/img/image2.jpg", "Gorilla"),
+                new CarouselItem(2, "/img/image3.jpg", "\"Human\""),
+                new CarouselItem(3, "/img/image4.jpg", "Chimpanzee")
             };
 
             return carouselItems;
