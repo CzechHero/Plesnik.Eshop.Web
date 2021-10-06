@@ -8,28 +8,35 @@
 
 <p><a class="btn btn-primary" role="button" asp-action="Create">Create new Carousel Item</a></p>
 
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th scope="col">Id</th>
-            <th scope="col">Image Source</th>
-            <th scope="col">Image Alt</th>
-            <th scope="col"></th>
-        </tr>
-    </thead>
-    <tbody>
-        @for (int i = 0; i < Model.Count; ++i)
-        {
-
+@if (Model != null && Model.Count > 0)
+{
+    <table class="table table-striped">
+        <thead>
             <tr>
-                <th scope="row">@Model[i].Id</th>
-                <td><a href="@Model[i].ImageSource">@Model[i].ImageSource</a></td>
-                <td>@Model[i].ImageAlt</td>
-                <td><a asp-action="Edit" asp-route-Id="@Model[i].Id">Edit</a> <a asp-action="Delete" asp-route-Id="@Model[i].Id" onclick="return confirmDelete();">Delete</a></td>
+                <th scope="col">Id</th>
+                <th scope="col">Image Source</th>
+                <th scope="col">Image Alt</th>
+                <th scope="col"></th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Model.Count; ++i)
+            {
+
+                <tr>
+                    <th scope="row">@Model[i].Id</th>
+                    <td><a href="@Model[i].ImageSource">@Model[i].ImageSource</a></td>
+                    <td>@Model[i].ImageAlt</td>
+                    <td><a asp-action="Edit" asp-route-Id="@Model[i].Id">Edit</a> <a asp-action="Delete" asp-route-Id="@Model[i].Id" onclick="return confirmDelete();">Delete</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>Carousel is empty.</p>
+}
 
 @section Scripts
 {
