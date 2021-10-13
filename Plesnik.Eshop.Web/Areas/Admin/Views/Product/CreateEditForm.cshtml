@@ -1,0 +1,23 @@
+﻿@using Plesnik.Eshop.Web.Areas.Admin.Controllers
+@model ProductItem
+
+@{
+    if (!String.IsNullOrWhiteSpace(ViewBag.Action))
+    {
+        <form asp-action="@ViewBag.Action" method="post">
+            @{
+                if (ViewBag.Action == nameof(ProductController.Edit))
+                {
+                    <input type="hidden" asp-for="Id" class="form-control" />
+                }
+            }
+
+            <div class="form-group">
+                <label asp-for="Name">Name</label>
+                <input asp-for="Name" type="text" class="form-control" placeholder="Enter Name">
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    }
+}
+

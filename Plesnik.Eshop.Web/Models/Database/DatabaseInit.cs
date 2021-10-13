@@ -20,5 +20,16 @@ namespace Plesnik.Eshop.Web.Models.Database
 
             return carouselItems;
         }
+
+        public List<ProductItem> GenerateProductItems()
+        {
+            List<ProductItem> productItems = new List<ProductItem>()
+            {
+                new ProductItem(0, "Produkt 1"),
+                new ProductItem(1, "Produkt 2")
+            };
+
+            return productItems;
+        }
     }
 }

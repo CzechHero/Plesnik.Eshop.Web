@@ -1,12 +1,12 @@
-﻿@model IList<CarouselItem>
+﻿@model IList<ProductItem>
 @{
-    ViewData["Title"] = "Carousel Item";
+    ViewData["Title"] = "Product Item";
 }
 <h1>@ViewData["Title"]</h1>
 
-<p>This page shows all Carousel Items for admin.</p>
+<p>This page shows all Product Items for admin.</p>
 
-<p><a class="btn btn-primary" role="button" asp-action="Create">Create new Carousel Item</a></p>
+<p><a class="btn btn-primary" role="button" asp-action="Create">Create new Product Item</a></p>
 
 @if (Model != null && Model.Count > 0)
 {
@@ -14,9 +14,7 @@
         <thead>
             <tr>
                 <th scope="col">Id</th>
-                <th scope="col">Image</th>
-                <th scope="col">Image Source</th>
-                <th scope="col">Image Alt</th>
+                <th scope="col">Name</th>
                 <th scope="col"></th>
             </tr>
         </thead>
@@ -26,9 +24,7 @@
 
                 <tr>
                     <th scope="row">@Model[i].Id</th>
-                    <td><img style="max-height: 32px" src="@Model[i].ImageSource" alt="@Model[i].ImageAlt"></td>
-                    <td class="text-truncate" style="max-width: 150px;"><a href="@Model[i].ImageSource">@Model[i].ImageSource</a></td>
-                    <td class="text-truncate" style="max-width: 150px;">@Model[i].ImageAlt</td>
+                    <td class="text-truncate" style="max-width: 150px;">@Model[i].Name</td>
                     <td><a asp-action="Edit" asp-route-Id="@Model[i].Id">Edit</a> <a asp-action="Delete" asp-route-Id="@Model[i].Id" onclick="return confirmDelete();">Delete</a></td>
                 </tr>
             }
@@ -37,7 +33,7 @@
 }
 else
 {
-    <p>Carousel is empty.</p>
+    <p>Product list is empty.</p>
 }
 
 @section Scripts
