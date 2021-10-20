@@ -8,8 +8,8 @@ namespace Plesnik.Eshop.Web.Models.Database
 {
     public static class DatabaseFake
     {
-        public static List<CarouselItem> CarouselItems;
-        public static List<ProductItem> ProductItems;
+        public static List<CarouselItem> CarouselItems { get; set; }
+        public static List<ProductItem> ProductItems { get; set; }
 
         static DatabaseFake()
         {
