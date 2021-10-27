@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -13,6 +14,10 @@ namespace Plesnik.Eshop.Web.Models.Entity
         [Key]
         [Required]
         public int Id { get; set; }
+
+        [NotMapped]
+        public IFormFile Image { get; set; }
+
         [StringLength(255)]
         [Required]
         public string ImageSource { get; set; }
