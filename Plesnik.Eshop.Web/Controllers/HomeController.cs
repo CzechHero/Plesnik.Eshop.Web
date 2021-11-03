@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using Plesnik.Eshop.Web.Models;
 using Plesnik.Eshop.Web.Models.Database;
 using Plesnik.Eshop.Web.Models.Entity;
+using Plesnik.Eshop.Web.Models.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -14,17 +15,21 @@ namespace Plesnik.Eshop.Web.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly EShopDbContext _dbContext;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, EShopDbContext eShopDbContext)
         {
             _logger = logger;
+            _dbContext = eShopDbContext;
         }
 
         public IActionResult Index()
         {
-            IList<CarouselItem> carouselItems = DatabaseFake.CarouselItems;
+            IndexViewModel indexViewModel = new IndexViewModel();
+            indexViewModel.CarouselItems = _dbContext.CarouselItems.ToList();
+            indexViewModel.ProductItems = _dbContext.ProductItems.ToList();
 
-            return View(carouselItems);
+            return View(indexViewModel);
         }
 
         public IActionResult Privacy()

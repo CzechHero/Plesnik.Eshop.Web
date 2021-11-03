@@ -15,6 +15,8 @@
             <tr>
                 <th scope="col">Id</th>
                 <th scope="col">Name</th>
+                <th scope="col">Description</th>
+                <th scope="col">Price</th>
                 <th scope="col"></th>
             </tr>
         </thead>
@@ -22,11 +24,13 @@
             @for (int i = 0; i < Model.Count; ++i)
             {
 
-                <tr>
-                    <th scope="row">@Model[i].Id</th>
-                    <td class="text-truncate" style="max-width: 150px;">@Model[i].Name</td>
-                    <td><a asp-action="Edit" asp-route-Id="@Model[i].Id">Edit</a> <a asp-action="Delete" asp-route-Id="@Model[i].Id" onclick="return confirmDelete();">Delete</a></td>
-                </tr>
+            <tr>
+                <th scope="row">@Model[i].Id</th>
+                <td class="text-truncate" style="max-width: 150px;">@Model[i].Name</td>
+                <td class="text-truncate" style="max-width: 150px;">@Model[i].Description</td>
+                <td class="text-truncate" style="max-width: 150px;">@Model[i].Price</td>
+                <td><a asp-action="Edit" asp-route-Id="@Model[i].Id">Edit</a> <a asp-action="Delete" asp-route-Id="@Model[i].Id" onclick="return confirmDelete();">Delete</a></td>
+            </tr>
             }
         </tbody>
     </table>

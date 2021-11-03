@@ -1,6 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Plesnik.Eshop.Web.Models.Database;
 using Plesnik.Eshop.Web.Models.Entity;
+using Plesnik.Eshop.Web.Models.Implementation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,9 +14,18 @@ namespace Plesnik.Eshop.Web.Areas.Admin.Controllers
     [Area("Admin")]
     public class ProductController : Controller
     {
+        private readonly EShopDbContext _dbContext;
+        private readonly IWebHostEnvironment _env;
+
+        public ProductController(EShopDbContext eShopDbContext, IWebHostEnvironment env)
+        {
+            _dbContext = eShopDbContext;
+            _env = env;
+        }
+
         public IActionResult Select()
         {
-            IList<ProductItem> productItems = DatabaseFake.ProductItems;
+            IList<ProductItem> productItems = _dbContext.ProductItems.ToList();
 
             return View(productItems);
         }
@@ -24,27 +36,29 @@ namespace Plesnik.Eshop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(ProductItem productItem)
+        public async Task<IActionResult> Create(ProductItem productItem)
         {
-            if (productItem != null && !string.IsNullOrEmpty(productItem.Name))
+            if (productItem != null && productItem.Image != null)
             {
-                if (DatabaseFake.ProductItems != null && DatabaseFake.ProductItems.Count > 0)
-                {
-                    productItem.Id = DatabaseFake.ProductItems.Last().Id + 1;
-                }
+                FileUpload fileUpload = new FileUpload(_env.WebRootPath, "img/product", "image");
+                productItem.ImageSource = await fileUpload.FileUploadAsync(productItem.Image);
 
-                DatabaseFake.ProductItems.Add(productItem);
-                return RedirectToAction(nameof(ProductController.Select));
+                if (!string.IsNullOrWhiteSpace(productItem.ImageSource))
+                {
+                    _dbContext.ProductItems.Add(productItem);
+
+                    await _dbContext.SaveChangesAsync();
+
+                    return RedirectToAction(nameof(ProductController.Select));
+                }
             }
-            else
-            {
-                return View(productItem);
-            }
+
+            return View(productItem);
         }
 
         public IActionResult Edit(int id)
         {
-            var foundItem = DatabaseFake.ProductItems.FirstOrDefault(c => c.Id == id);
+            var foundItem = _dbContext.ProductItems.FirstOrDefault(c => c.Id == id);
             if (foundItem != null)
             {
                 return View(foundItem);
@@ -56,12 +70,29 @@ namespace Plesnik.Eshop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public IActionResult Edit(ProductItem productItemEdit)
+        public async Task<IActionResult> Edit(ProductItem productItem)
         {
-            var foundItem = DatabaseFake.ProductItems.FirstOrDefault(c => c.Id == productItemEdit.Id);
+            var foundItem = _dbContext.ProductItems.FirstOrDefault(c => c.Id == productItem.Id);
             if (foundItem != null)
             {
-                foundItem.Name = productItemEdit.Name;
+                if (productItem != null && productItem.Image != null)
+                {
+                    FileUpload fileUpload = new FileUpload(_env.WebRootPath, "img/product", "image");
+                    productItem.ImageSource = await fileUpload.FileUploadAsync(productItem.Image);
+
+                    if (!string.IsNullOrWhiteSpace(productItem.ImageSource))
+                    {
+                        foundItem.ImageSource = productItem.ImageSource;
+                    }
+                }
+
+                foundItem.Name = productItem.Name;
+                foundItem.Description = productItem.Description;
+                foundItem.Price = productItem.Price;
+                foundItem.ImageAlt = productItem.ImageAlt;
+
+                await _dbContext.SaveChangesAsync();
+
                 return RedirectToAction(nameof(ProductController.Select));
             }
             else
@@ -70,12 +101,15 @@ namespace Plesnik.Eshop.Web.Areas.Admin.Controllers
             }
         }
 
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            IList<ProductItem> productItems = DatabaseFake.ProductItems;
-            var productItem = productItems.FirstOrDefault(i => i.Id == id);
+            DbSet<ProductItem> carouselItems = _dbContext.ProductItems;
+            var productItem = carouselItems.FirstOrDefault(i => i.Id == id);
             if (productItem != null)
-                productItems.Remove(productItem);
+            {
+                carouselItems.Remove(productItem);
+                await _dbContext.SaveChangesAsync();
+            }
 
             return RedirectToAction(nameof(ProductController.Select));
         }
