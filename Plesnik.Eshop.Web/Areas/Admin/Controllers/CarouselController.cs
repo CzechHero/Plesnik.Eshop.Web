@@ -43,7 +43,9 @@ namespace Plesnik.Eshop.Web.Areas.Admin.Controllers
                 FileUpload fileUpload = new FileUpload(_env.WebRootPath, "img/carousel", "image");
                 carouselItem.ImageSource = await fileUpload.FileUploadAsync(carouselItem.Image);
 
-                if (!string.IsNullOrWhiteSpace(carouselItem.ImageSource))
+                ModelState.Clear();
+                TryValidateModel(carouselItem);
+                if (ModelState.IsValid)
                 {
                     _dbContext.CarouselItems.Add(carouselItem);
 
@@ -80,6 +82,16 @@ namespace Plesnik.Eshop.Web.Areas.Admin.Controllers
                     FileUpload fileUpload = new FileUpload(_env.WebRootPath, "img/carousel", "image");
                     carouselItem.ImageSource = await fileUpload.FileUploadAsync(carouselItem.Image);
 
+                }
+                else
+                {
+                    carouselItem.ImageSource = " ";
+                }
+
+                ModelState.Clear();
+                TryValidateModel(carouselItem);
+                if (ModelState.IsValid)
+                {
                     if (!string.IsNullOrWhiteSpace(carouselItem.ImageSource))
                     {
                         foundItem.ImageSource = carouselItem.ImageSource;

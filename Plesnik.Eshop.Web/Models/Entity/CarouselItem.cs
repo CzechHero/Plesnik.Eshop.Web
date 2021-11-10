@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Plesnik.Eshop.Web.Models.Validation;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -15,6 +16,7 @@ namespace Plesnik.Eshop.Web.Models.Entity
         [Required]
         public int Id { get; set; }
 
+        [ContentType("image")]
         [NotMapped]
         public IFormFile Image { get; set; }
 
