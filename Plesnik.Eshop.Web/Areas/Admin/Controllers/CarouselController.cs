@@ -82,6 +82,10 @@ namespace Plesnik.Eshop.Web.Areas.Admin.Controllers
                     FileUpload fileUpload = new FileUpload(_env.WebRootPath, "img/carousel", "image");
                     carouselItem.ImageSource = await fileUpload.FileUploadAsync(carouselItem.Image);
 
+                    if (!string.IsNullOrWhiteSpace(carouselItem.ImageSource))
+                    {
+                        foundItem.ImageSource = carouselItem.ImageSource;
+                    }
                 }
                 else
                 {
@@ -92,16 +96,17 @@ namespace Plesnik.Eshop.Web.Areas.Admin.Controllers
                 TryValidateModel(carouselItem);
                 if (ModelState.IsValid)
                 {
-                    if (!string.IsNullOrWhiteSpace(carouselItem.ImageSource))
-                    {
-                        foundItem.ImageSource = carouselItem.ImageSource;
-                    }
+                    foundItem.ImageAlt = carouselItem.ImageAlt;
+                    await _dbContext.SaveChangesAsync();
+
+                    return RedirectToAction(nameof(CarouselController.Select));
                 }
 
-                foundItem.ImageAlt = carouselItem.ImageAlt;
-                await _dbContext.SaveChangesAsync();
+                //foundItem.ImageAlt = carouselItem.ImageAlt;
+                //await _dbContext.SaveChangesAsync();
 
-                return RedirectToAction(nameof(CarouselController.Select));
+                //return RedirectToAction(nameof(CarouselController.Select));
+                return View(carouselItem);
             }
             else
             {
