@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Plesnik.Eshop.Web.Models.Database;
+using Plesnik.Eshop.Web.Models.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,6 +26,19 @@ namespace Plesnik.Eshop.Web
                         .GetRequiredService<EShopDbContext>();
                     DatabaseInit dbInit = new DatabaseInit();
                     dbInit.Initialize(dbContext);
+
+                    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<Role>>();
+                    Task task = dbInit.EnsureRoleCreated(roleManager);
+                    task.Wait();
+                    task.Dispose();
+
+                    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
+                    task = dbInit.EnsureAdminCreated(userManager);
+                    task.Wait();
+                    task.Dispose();
+                    task = dbInit.EnsureManagerCreated(userManager);
+                    task.Wait();
+                    task.Dispose();
                 }
             }
             host.Run();

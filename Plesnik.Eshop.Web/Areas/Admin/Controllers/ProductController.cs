@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Plesnik.Eshop.Web.Models.Database;
 using Plesnik.Eshop.Web.Models.Entity;
+using Plesnik.Eshop.Web.Models.Identity;
 using Plesnik.Eshop.Web.Models.Implementation;
 using System;
 using System.Collections.Generic;
@@ -12,6 +14,7 @@ using System.Threading.Tasks;
 namespace Plesnik.Eshop.Web.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = nameof(RolesEnum.Admin) + ", " + nameof(RolesEnum.Manager))]
     public class ProductController : Controller
     {
         private readonly EShopDbContext _dbContext;

@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Plesnik.Eshop.Web.Models.ApplicationServices.Abstraction;
+using Plesnik.Eshop.Web.Models.ApplicationServices.Implementation;
 using Plesnik.Eshop.Web.Models.Database;
 using Plesnik.Eshop.Web.Models.Identity;
 using System;
@@ -64,9 +66,7 @@ namespace Plesnik.Eshop.Web
                 options.SlidingExpiration = true;
             });
 
-
-
-            //services.AddScoped<ISecurityApplicationService, SecurityIdentityApplicationService>();
+            services.AddScoped<ISecurityApplicationService, SecurityIdentityApplicationService>();
 
             services.AddControllersWithViews();
         }

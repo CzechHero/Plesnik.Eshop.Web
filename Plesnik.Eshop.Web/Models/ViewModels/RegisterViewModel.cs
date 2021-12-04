@@ -16,7 +16,7 @@ namespace Plesnik.Eshop.Web.Models.ViewModels
             "Passwords must have at least one uppercase('A'-'Z').";
 
         [Required]
-        public string Username { get; set; }
+        public string UserName { get; set; }
 
         public string FirstName { get; set; }
 
@@ -27,7 +27,7 @@ namespace Plesnik.Eshop.Web.Models.ViewModels
         public string Email { get; set; }
 
         [Phone]
-        public string Phone { get; set; }
+        public string PhoneNumber { get; set; }
 
         [Required]
         //[UniqueCharacters(6)]

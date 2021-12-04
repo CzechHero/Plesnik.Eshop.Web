@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Plesnik.Eshop.Web.Models.Entity;
 using Plesnik.Eshop.Web.Models.Identity;
+using Plesnik.Eshop.Web.Models.Database.Configuration;
+using Plesnik.Eshop.Web.Models.Entity;
 
 namespace Plesnik.Eshop.Web.Models.Database
 {
@@ -9,28 +10,25 @@ namespace Plesnik.Eshop.Web.Models.Database
     {
         public DbSet<CarouselItem> CarouselItems { get; set; }
         public DbSet<ProductItem> ProductItems { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderItem> OrderItems { get; set; }
 
         public EShopDbContext(DbContextOptions options) : base(options)
         {
         
         }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        protected override void OnModelCreating(ModelBuilder builder)
         {
-            base.OnModelCreating(modelBuilder);
+            base.OnModelCreating(builder);
 
-            var entityTypes = modelBuilder.Model.GetEntityTypes();
+            builder.ApplyConfiguration(new OrderConfiguration());
+
+            var entityTypes = builder.Model.GetEntityTypes();
             foreach (var entity in entityTypes)
             {
                 entity.SetTableName(entity.GetTableName().Replace("AspNet", ""));
             }
-
-
-            //modelBuilder.Entity<CarouselItem>()
-            //    .HasKey(e => e.Id);
-
-            //modelBuilder.Entity<ProductItem>()
-            //    .HasKey(e => e.Id);
         }
     }
 }
