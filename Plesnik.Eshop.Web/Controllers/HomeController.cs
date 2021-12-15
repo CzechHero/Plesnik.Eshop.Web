@@ -25,6 +25,7 @@ namespace Plesnik.Eshop.Web.Controllers
 
         public IActionResult Index()
         {
+            _logger.LogInformation("Index viewed");
             IndexViewModel indexViewModel = new IndexViewModel();
             indexViewModel.CarouselItems = _dbContext.CarouselItems.ToList();
             indexViewModel.ProductItems = _dbContext.ProductItems.ToList();

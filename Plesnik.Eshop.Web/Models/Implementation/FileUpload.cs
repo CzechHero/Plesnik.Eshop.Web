@@ -41,9 +41,10 @@ namespace Plesnik.Eshop.Web.Models.Implementation
             {
                 var fileName = Path.GetFileNameWithoutExtension(img.FileName);
                 var fileExtension = Path.GetExtension(img.FileName);
-                var fileNameGenerated = Path.GetRandomFileName();
+                //var fileNameGenerated = Path.GetRandomFileName();
 
-                var fileRelative = Path.Combine(FolderName, fileNameGenerated + fileExtension);
+                //var fileRelative = Path.Combine(FolderName, fileNameGenerated + fileExtension);
+                var fileRelative = Path.Combine(FolderName, fileName + fileExtension);
                 var filePath = Path.Combine(RootPath, fileRelative);
 
                 Directory.CreateDirectory(Path.Combine(RootPath, FolderName));

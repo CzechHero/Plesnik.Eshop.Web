@@ -87,3 +87,11 @@ body {
     background-repeat: no-repeat;
     background-size: cover;
 }
+
+.noparallax-footer {
+    background-color: white;
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
