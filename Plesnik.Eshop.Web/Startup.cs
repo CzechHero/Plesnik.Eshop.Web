@@ -87,7 +87,7 @@ namespace Plesnik.Eshop.Web
         {
             // Set culture info
             var cultureInfo = new CultureInfo("cs-CZ");
-            cultureInfo.NumberFormat.CurrencySymbol = "Kč";
+            cultureInfo.NumberFormat.CurrencySymbol = "CZK";
             CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
             CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
 

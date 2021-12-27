@@ -81,7 +81,13 @@
                                 </div>
                                 <!-- Product actions-->
                                 <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                    <div class="text-center"></div>
+                                    <div class="text-center">
+                                        <button class="btn btn-outline-dark flex-shrink-0" type="button"
+                                                onclick="Buy(@product.Id,'@Url.Action("AddOrderItemsToSession", "CustomerOrderNotCart", new { Area = "Customer" })', '#total_price', '@System.Globalization.CultureInfo.CurrentCulture.Name')">
+                                            <i class="bi-cart-fill me-1"></i>
+                                            Buy
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
