@@ -32,6 +32,14 @@ namespace Plesnik.Eshop.Web.Models.Database
                 {
                     eShopDbContext.ProductItems.Add(pi);
                 }
+                // Make items related
+                var productRelation = new ProductRelation(
+                    productItems.ElementAt(0).Id,
+                    productItems.ElementAt(1).Id,
+                    productItems.ElementAt(0),
+                    productItems.ElementAt(1)
+                );
+                eShopDbContext.ProductRelations.Add(productRelation);
             }
 
             eShopDbContext.SaveChanges();

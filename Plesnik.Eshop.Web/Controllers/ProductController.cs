@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Plesnik.Eshop.Web.Models.Database;
+using Plesnik.Eshop.Web.Models.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,10 +20,17 @@ namespace Plesnik.Eshop.Web.Controllers
 
         public IActionResult Detail(int id)
         {
-            var foundItem = _dbContext.ProductItems.FirstOrDefault(c => c.Id == id);
-            if (foundItem != null)
+            var product = _dbContext.ProductItems.FirstOrDefault(c => c.Id == id);
+            if (product != null)
             {
-                return View(foundItem);
+                var relatedProducts = _dbContext.ProductRelations
+                    .Where(p => p.ProductId == product.Id)
+                    .Select(p => p.RelatedProduct)
+                    .OrderByDescending(p => p.Price)
+                    .ToList();
+                var viewModel = new DetailViewModel(product, relatedProducts);
+
+                return View(viewModel);
             }
             else
             {

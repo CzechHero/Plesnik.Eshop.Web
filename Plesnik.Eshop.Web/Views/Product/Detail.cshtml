@@ -1,4 +1,4 @@
-﻿@model ProductItem
+﻿@model DetailViewModel
 
 @section Styles
 {
@@ -8,18 +8,18 @@
 <section class="py-5">
     <div class="container px-4 px-lg-5 my-5">
         <div class="row gx-4 gx-lg-5 align-items-center">
-            <div class="col-md-6"><img class="card-img-top mb-5 mb-md-0" src="@Model.ImageSource" alt="@Model.ImageAlt" /></div>
+            <div class="col-md-6"><img class="card-img-top mb-5 mb-md-0" src="@Model.Product.ImageSource" alt="@Model.Product.ImageAlt" /></div>
             <div class="col-md-6">
-                <div class="small mb-1">P-ID: @Model.Id</div>
-                <h1 class="display-5 fw-bolder">@Model.Name</h1>
+                <div class="small mb-1">P-ID: @Model.Product.Id</div>
+                <h1 class="display-5 fw-bolder">@Model.Product.Name</h1>
                 <div class="fs-5 mb-5">
-                    <span>@Model.Price CZK </span>
+                    <span>@Model.Product.Price CZK </span>
                 </div>
-                <p class="lead">@Model.Description</p>
+                <p class="lead">@Model.Product.Description</p>
                 <div class="d-flex">
                     <input class="form-control text-center me-3" id="inputQuantity" type="num" value="1" style="max-width: 3rem" />
-                    <button class="btn btn-outline-dark flex-shrink-0" type="button" 
-                            onclick="Buy(@Model.Id,'@Url.Action("AddOrderItemsToSession", "CustomerOrderNotCart", new { Area = "Customer" })', '#total_price', '@System.Globalization.CultureInfo.CurrentCulture.Name')">
+                    <button class="btn btn-outline-dark flex-shrink-0" type="button"
+                            onclick="Buy(@Model.Product.Id,'@Url.Action("AddOrderItemsToSession", "CustomerOrderNotCart", new { Area = "Customer" })', '#total_price', '@System.Globalization.CultureInfo.CurrentCulture.Name')">
                         <i class="bi-cart-fill me-1"></i>
                         Buy
                     </button>
@@ -31,32 +31,56 @@
 <!-- Related items section-->
 <section class="py-5 bg-light">
     <div class="container px-4 px-lg-5 mt-5">
-        <h2 class="fw-bolder mb-4">Related products</h2>
+        <div class="d-flex mb-5">
+            <h2 class="fw-bolder mr-2">Related products</h2>
+            <button type="button" class="btn btn-link flex-shrink-0">Add</button>
+        </div>
         <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
-
-            <div class="col mb-5">
-                <div class="card h-100">
-                    <!-- Product image-->
-                    <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
-                    <!-- Product details-->
-                    <div class="card-body p-4">
-                        <div class="text-center">
-                            <!-- Product name-->
-                            <h5 class="fw-bolder">Fancy Product</h5>
-                            <!-- Product price-->
-                            $40.00 - $80.00
+            @{ if (Model != null && Model.RelatedProducts != null && Model.RelatedProducts.Count > 0)
+                {
+                    @foreach (var product in Model.RelatedProducts)
+                    {
+                        <div class="col mb-5">
+                            <div class="card h-100">
+                                <a class="btn btn-outline-dark mt-auto" asp-controller="Product" asp-action="Detail" asp-route-Id="@product.Id">
+                                    <!-- Product image-->
+                                    <img class="card-img-top" src="@product.ImageSource" alt="@product.ImageAlt" />
+                                </a>
+                                <!-- Product details-->
+                                <div class="card-body p-4">
+                                    <div class="text-center">
+                                        <!-- Product name-->
+                                        <h5 class="fw-bolder">@product.Name</h5>
+                                        <!-- Product price-->
+                                        @product.Price CZK
+                                    </div>
+                                </div>
+                                <!-- Product actions-->
+                                <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                    <div class="text-center">
+                                        <button class="btn btn-outline-dark flex-shrink-0" type="button"
+                                                onclick="Buy(@product.Id,'@Url.Action("AddOrderItemsToSession", "CustomerOrderNotCart", new { Area = "Customer" })', '#total_price', '@System.Globalization.CultureInfo.CurrentCulture.Name')">
+                                            <i class="bi-cart-fill me-1"></i>
+                                            Buy
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
+                    }
+                }
+                else
+                {
+                    <div class="text-center mb-5">
+                        <h4>No related products</h4>
+                        <p class="font-weight-light">Help us by adding a new one!</p>
                     </div>
-                    <!-- Product actions-->
-                    <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                        <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">View options</a></div>
-                    </div>
-                </div>
-            </div>
-
+                }
+            }
         </div>
     </div>
 </section>
+
 
 @section Scripts
 {

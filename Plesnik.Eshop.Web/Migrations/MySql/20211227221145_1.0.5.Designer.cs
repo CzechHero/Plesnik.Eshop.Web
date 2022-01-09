@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Plesnik.Eshop.Web.Models.Database;
 
 namespace Plesnik.Eshop.Web.Migrations.MySql
 {
     [DbContext(typeof(EShopDbContext))]
-    partial class EShopDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211227221145_1.0.5")]
+    partial class _105
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -241,6 +243,9 @@ namespace Plesnik.Eshop.Web.Migrations.MySql
                     b.Property<int>("RelatedProductId")
                         .HasColumnType("int");
 
+                    b.Property<int>("Score")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ProductId");
@@ -252,24 +257,13 @@ namespace Plesnik.Eshop.Web.Migrations.MySql
 
             modelBuilder.Entity("Plesnik.Eshop.Web.Models.Entity.ProductRelationEntry", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("RelatedProductId")
+                    b.Property<int>("ProductRelationId")
                         .HasColumnType("int");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProductId");
-
-                    b.HasIndex("RelatedProductId");
+                    b.HasIndex("ProductRelationId");
 
                     b.HasIndex("UserId");
 
@@ -476,15 +470,9 @@ namespace Plesnik.Eshop.Web.Migrations.MySql
 
             modelBuilder.Entity("Plesnik.Eshop.Web.Models.Entity.ProductRelationEntry", b =>
                 {
-                    b.HasOne("Plesnik.Eshop.Web.Models.Entity.ProductItem", "Product")
+                    b.HasOne("Plesnik.Eshop.Web.Models.Entity.ProductRelation", "ProductRelation")
                         .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Plesnik.Eshop.Web.Models.Entity.ProductItem", "RelatedProduct")
-                        .WithMany()
-                        .HasForeignKey("RelatedProductId")
+                        .HasForeignKey("ProductRelationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -494,9 +482,7 @@ namespace Plesnik.Eshop.Web.Migrations.MySql
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Product");
-
-                    b.Navigation("RelatedProduct");
+                    b.Navigation("ProductRelation");
 
                     b.Navigation("User");
                 });

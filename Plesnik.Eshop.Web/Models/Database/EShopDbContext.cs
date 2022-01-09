@@ -12,6 +12,8 @@ namespace Plesnik.Eshop.Web.Models.Database
         public DbSet<ProductItem> ProductItems { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
+        public DbSet<ProductRelation> ProductRelations { get; set; }
+        public DbSet<ProductRelationEntry> ProductRelationEntries { get; set; }
 
         public EShopDbContext(DbContextOptions options) : base(options)
         {
