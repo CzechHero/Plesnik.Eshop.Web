@@ -1,0 +1,50 @@
+﻿@model IList<ProductRelationEntry>
+
+@{
+    ViewData["Title"] = "Suggested Related Products";
+}
+
+<h1>Suggested Related Products</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Product
+            </th>
+            <th>
+                Related Product
+            </th>
+            <th>
+                Proposer Username
+            </th>
+            <th>
+                Date Suggested
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td>
+                <a asp-controller="Product" asp-action="Details" asp-route-id="@item.ProductId">@Html.DisplayFor(modelItem => item.Product.Name)</a>
+            </td>
+            <td>
+                <a asp-controller="Product" asp-action="Details" asp-route-id="@item.RelatedProductId">@Html.DisplayFor(modelItem => item.RelatedProduct.Name)</a>
+            </td>
+            <td>
+                <a asp-controller="Users" asp-action="Details" asp-route-id="@item.UserId">@Html.DisplayFor(modelItem => item.User.UserName)</a>
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateTimeSuggested)
+            </td>
+            <td>
+                <a asp-action="Approve" asp-route-id="@item.Id">Approve</a> |
+                <a asp-action="Disapprove" asp-route-id="@item.Id">Disapprove</a>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>

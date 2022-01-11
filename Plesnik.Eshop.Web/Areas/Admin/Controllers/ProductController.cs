@@ -6,6 +6,7 @@ using Plesnik.Eshop.Web.Models.Database;
 using Plesnik.Eshop.Web.Models.Entity;
 using Plesnik.Eshop.Web.Models.Identity;
 using Plesnik.Eshop.Web.Models.Implementation;
+using Plesnik.Eshop.Web.Models.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,6 +25,30 @@ namespace Plesnik.Eshop.Web.Areas.Admin.Controllers
         {
             _dbContext = eShopDbContext;
             _env = env;
+        }
+
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var product = await _dbContext.ProductItems
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            var relatedProducts = _dbContext.ProductRelations
+                .Where(p => p.ProductId == product.Id)
+                .Select(p => p.RelatedProduct)
+                .OrderByDescending(p => p.Price)
+                .ToList();
+            var viewModel = new DetailViewModel(product, relatedProducts);
+
+            return View(viewModel);
         }
 
         public IActionResult Select()
@@ -115,6 +140,52 @@ namespace Plesnik.Eshop.Web.Areas.Admin.Controllers
             }
 
             return RedirectToAction(nameof(ProductController.Select));
+        }
+
+        public async Task<IActionResult> DeleteRelated(int relatedId, int productId)
+        {
+            var relatedItem = await _dbContext.ProductRelations
+                .FirstOrDefaultAsync(i => i.ProductId == productId && i.RelatedProductId == relatedId);
+            if (relatedItem == null)
+            {
+                return NotFound();
+            }
+
+            _dbContext.ProductRelations.Remove(relatedItem);
+            await _dbContext.SaveChangesAsync();
+
+            return RedirectToAction(nameof(this.Details), new { id = productId });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddRelated(int productId, int relatedId)
+        {
+            // Validate
+            var product = _dbContext.ProductItems.FirstOrDefault(p => p.Id == productId);
+            if (product == null)
+            {
+                return NotFound();
+            }
+            var relatedProduct = _dbContext.ProductItems.FirstOrDefault(p => p.Id == relatedId);
+            if (relatedProduct == null)
+            {
+                return NotFound();
+            }
+
+            // Check if relation exists
+            if (_dbContext.ProductRelations.Any(p => p.ProductId == productId && p.RelatedProductId == relatedId))
+            {
+                return BadRequest();
+            }
+
+            // Add new related item
+            var newRelatedItem = new ProductRelation(
+                product.Id, relatedProduct.Id, product, relatedProduct
+            );
+            await _dbContext.ProductRelations.AddAsync(newRelatedItem);
+            await _dbContext.SaveChangesAsync();
+
+            return RedirectToAction(nameof(this.Details), new { id = productId });
         }
     }
 }

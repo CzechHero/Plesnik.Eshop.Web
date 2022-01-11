@@ -27,6 +27,9 @@ namespace Plesnik.Eshop.Web.Models.Entity
         [ForeignKey(nameof(User))]
         public int UserId { get; set; }
 
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+        public DateTime DateTimeSuggested { get; protected set; }
+
         public ProductItem Product { get; set; }
         public ProductItem RelatedProduct { get; set; }
         public User User { get; set; }

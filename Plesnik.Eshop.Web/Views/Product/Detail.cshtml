@@ -17,7 +17,7 @@
                 </div>
                 <p class="lead">@Model.Product.Description</p>
                 <div class="d-flex">
-                    <input class="form-control text-center me-3" id="inputQuantity" type="num" value="1" style="max-width: 3rem" />
+                    @*<input class="form-control text-center me-3" id="inputQuantity" type="num" value="1" style="max-width: 3rem" />*@
                     <button class="btn btn-outline-dark flex-shrink-0" type="button"
                             onclick="Buy(@Model.Product.Id,'@Url.Action("AddOrderItemsToSession", "CustomerOrderNotCart", new { Area = "Customer" })', '#total_price', '@System.Globalization.CultureInfo.CurrentCulture.Name')">
                         <i class="bi-cart-fill me-1"></i>
@@ -31,10 +31,7 @@
 <!-- Related items section-->
 <section class="py-5 bg-light">
     <div class="container px-4 px-lg-5 mt-5">
-        <div class="d-flex mb-5">
-            <h2 class="fw-bolder mr-2">Related products</h2>
-            <button type="button" class="btn btn-link flex-shrink-0">Add</button>
-        </div>
+        <h2 class="fw-bolder mb-5">Related products</h2>
         <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
             @{ if (Model != null && Model.RelatedProducts != null && Model.RelatedProducts.Count > 0)
                 {
@@ -73,14 +70,77 @@
                 {
                     <div class="text-center mb-5">
                         <h4>No related products</h4>
-                        <p class="font-weight-light">Help us by adding a new one!</p>
+                        @if (User.Identity.IsAuthenticated == true && (User.IsInRole(RolesEnum.Admin.ToString()) || User.IsInRole(RolesEnum.Manager.ToString()) || User.IsInRole(RolesEnum.Customer.ToString())))
+                        {
+                            <p class="font-weight-light">Help us by suggesting one!</p>
+                        }
                     </div>
                 }
             }
         </div>
+
+        @{
+            @if (User.Identity.IsAuthenticated == true && (User.IsInRole(RolesEnum.Admin.ToString()) || User.IsInRole(RolesEnum.Manager.ToString()) || User.IsInRole(RolesEnum.Customer.ToString())))
+            {
+                <!-- Button trigger modal -->
+                <div class="d-flex flex-row-reverse mb-3">
+                    <a class="nav-link" data-toggle="modal" href="#suggestModal">Suggest a Product</a>
+                </div>
+                <!-- Modal -->
+                <div class="modal fade" id="suggestModal" tabindex="-1" role="dialog" aria-labelledby="suggestModalTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="suggestModalLongTitle">Suggest Related Product</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="clearSearchData()">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+
+                            <div class="modal-body">
+                                <div id="eventInsForm">
+                                    <div class="mb-3">
+                                        <input id="relatedSearch" class="form-control mb-3" type="text" placeholder="Enter Product Name" aria-label="Enter Product Name" aria-describedby="basic-addon2">
+                                    </div>
+                                    <input id="relatedSearchId" type="number" class="form-control" disabled hidden>
+                                    <div class="collapse" id="collapseRelated">
+                                        <div class="card">
+                                            <div class="row g-0">
+                                                <div class="col-md-4">
+                                                    <img id="relatedSearchImg" src="" class="img-fluid rounded-start mt-3 ml-3 pr-3" alt="">
+                                                </div>
+                                                <div class="col-md-8">
+                                                    <div class="card-body">
+                                                        <h5 id="relatedSearchTitle" class="card-title"></h5>
+                                                        <h6 id="relatedSearchSubtitle" class="card-subtitle mb-2 text-muted"></h6>
+                                                        <p id="relatedSearchDesc" class="card-text"></p>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="card-footer">
+                                                <p class="text-end mb-0"><small id="relatedSearchPrice" class="text-muted"></small></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="clearSearchData()">Close</button>
+                                <button type="button" class="btn btn-primary"
+                                        onclick="Suggest(@Model.Product.Id, '@Url.Action("Suggest", "Product")')">
+                                    Submit
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+
     </div>
 </section>
-
 
 @section Scripts
 {

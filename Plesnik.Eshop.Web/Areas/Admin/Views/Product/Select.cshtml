@@ -6,7 +6,11 @@
 
 <p>This page shows all Product Items for admin.</p>
 
-<p><a class="btn btn-primary" role="button" asp-action="Create">Create new Product Item</a></p>
+<div class="d-flex justify-content-between">
+    <p><a class="btn btn-primary" role="button" asp-action="Create">Create new Product</a></p>
+    <a class="nav-link" asp-area="Admin" asp-controller="ProductRelationEntry" asp-action="Select">Suggested Related Products</a>
+</div>
+
 
 @if (Model != null && Model.Count > 0)
 {
@@ -24,13 +28,17 @@
             @for (int i = 0; i < Model.Count; ++i)
             {
 
-            <tr>
-                <th scope="row">@Model[i].Id</th>
-                <td class="text-truncate" style="max-width: 150px;">@Model[i].Name</td>
-                <td class="text-truncate" style="max-width: 150px;">@Model[i].Description</td>
-                <td class="text-truncate" style="max-width: 150px;">@Model[i].Price</td>
-                <td><a asp-action="Edit" asp-route-Id="@Model[i].Id">Edit</a> <a asp-action="Delete" asp-route-Id="@Model[i].Id" onclick="return confirmDelete();">Delete</a></td>
-            </tr>
+                <tr>
+                    <th scope="row">@Model[i].Id</th>
+                    <td class="text-truncate" style="max-width: 150px;">@Model[i].Name</td>
+                    <td class="text-truncate" style="max-width: 150px;">@Model[i].Description</td>
+                    <td class="text-truncate" style="max-width: 150px;">@Model[i].Price</td>
+                    <td>
+                        <a asp-action="Details" asp-route-Id="@Model[i].Id">Details</a> |
+                        <a asp-action="Edit" asp-route-Id="@Model[i].Id">Edit</a> |
+                        <a asp-action="Delete" asp-route-Id="@Model[i].Id" onclick="return confirmDelete();">Delete</a>
+                    </td>
+                </tr>
             }
         </tbody>
     </table>
