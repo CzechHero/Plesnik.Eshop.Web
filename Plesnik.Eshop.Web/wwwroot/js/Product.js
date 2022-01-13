@@ -34,7 +34,7 @@ $(document).ready(function () {
         source: function (request, response) {
             $.ajax({
                 url: '/api/product/related',
-                /*headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },*/
+                //headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
                 data: {
                     "productId": lastSegment,
                     "query": request.term
@@ -50,8 +50,6 @@ $(document).ready(function () {
                 },
                 error: function (xhr, textStatus, error) {
                     alert(xhr.statusText);
-                    alert(textStatus);
-                    alert(error);
                 },
                 failure: function (response) {
                     alert("Failure " + response.responseText);

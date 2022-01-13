@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Plesnik.Eshop.Web.Models.Database;
 using Plesnik.Eshop.Web.Models.Entity;
+using Plesnik.Eshop.Web.Models.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +12,8 @@ using System.Threading.Tasks;
 
 namespace Plesnik.Eshop.Web.Areas.Customer.Controllers
 {
+    [Area("Customer")]
+    [Authorize(Roles = nameof(RolesEnum.Customer))]
     [Route("api/product")]
     [ApiController]
     public class ProductApiController : ControllerBase
@@ -24,6 +28,7 @@ namespace Plesnik.Eshop.Web.Areas.Customer.Controllers
         [HttpGet("related")]
         [Route("api/product/related")]
         [Produces("application/json")]
+        //[ValidateAntiForgeryToken]
         public async Task<IActionResult> RelatedSearch(int productId, string query)
         {
             var product = await _dbContext.ProductItems.FirstOrDefaultAsync(p => p.Id == productId);
